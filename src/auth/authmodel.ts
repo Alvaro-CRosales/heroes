@@ -1,22 +1,33 @@
 import {PrismaClient} from '@prisma/client';
-import {JWT} from '../helpers/jwt';
 import bcrypt from 'bcrypt';
-import {ITokenizeModel} from '../helpers/jwt';
 
 const prisma = new PrismaClient();
 
 export interface IUserModel{
     name: string,
     email: string,
-    password: string,
+    password: string
 }
 
 export interface ITokenModel{
-    id: number
+    id: number,
+    role: string,
+}
+
+export interface IUserCredentials{
+    id: number,
+    password: string,
+    role: string
+}
+
+export interface INewUser{
+    name: string,
+    email: string,
+    message: string
 }
 
 export class AuthModel {
-  public static async createUser(user: IUserModel): Promise<ITokenizeModel> {
+  public static async createUser(user: IUserModel): Promise<INewUser> {
     const resultUser = await prisma.user.create({
       data: {
         email: user.email,
@@ -24,6 +35,17 @@ export class AuthModel {
         password: await bcrypt.hash(user.password, 10),
       },
     });
-    return await JWT.tokenize({id: resultUser.id});
+    return {name: resultUser.name!, email: resultUser.email, message:
+      'Se creó un nuevo uusario'};
+  }
+
+  public static async logIn(user: IUserModel): Promise<IUserCredentials> {
+    const resultUser = await prisma.user.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
+    return {id: resultUser!.id, password: resultUser!.password, role:
+      resultUser!.role};
   }
 }

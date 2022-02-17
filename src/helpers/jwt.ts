@@ -11,4 +11,10 @@ export class JWT {
     const token = jwt.sign(tokenModel, String(env.JWT_SECRET));
     return {jwt: token};
   }
+
+  public static async decoded(tokenModel:string):Promise<ITokenModel> {
+    const token:any = jwt.verify(tokenModel.replace('Bearer ', ''),
+        env.JWT_SECRET);
+    return {id: token.id, role: token.role};
+  }
 }
