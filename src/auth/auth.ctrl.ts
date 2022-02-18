@@ -1,15 +1,16 @@
 import handler, {IResponseModel} from '../helpers/handler';
 import {Request, Response} from 'express';
-import {AuthService} from './authservice';
-import {IUserModel} from './authmodel';
+import {AuthService} from './auth.service';
+import {IUserModel} from './auth.model';
 
 export class AuthCtrl {
   public static async createUser(req:Request, res:Response): Promise<void> {
     try {
       const user: IUserModel = req.body;
-      const userToken = req.headers['authorization'];
+      const creatorId = res.locals.user.id;
+      console.log(creatorId);
       const serviceResponse:IResponseModel = await AuthService.createUser(user,
-          userToken!);
+          creatorId);
       handler(res, serviceResponse);
     } catch (error:any) {
       console.log(error);

@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
-import {ITokenModel} from '../auth/authmodel';
+import {Request, Response, NextFunction} from 'express';
+import {ITokenModel} from '../auth/auth.model';
 import env from '../config/env';
+import handler from './handler';
 
 export interface ITokenizeModel {
     jwt: string
@@ -12,9 +14,16 @@ export class JWT {
     return {jwt: token};
   }
 
-  public static async decoded(tokenModel:string):Promise<ITokenModel> {
-    const token:any = jwt.verify(tokenModel.replace('Bearer ', ''),
-        env.JWT_SECRET);
-    return {id: token.id, role: token.role};
+  public static async isAdmin(req: Request, res: Response, next:NextFunction)
+  :Promise<void> {
+    const token: any = jwt.verify(req.headers.authorization?
+      req.headers.authorization.replace('Bearer ', ''): '',
+    env.JWT_SECRET);
+    if (token.role === 'ADMIN') {
+      res.locals.user = token;
+      next();
+    } else {
+      handler(res, {code: 403, message: 'Service forbbiden'});
+    }
   }
 }

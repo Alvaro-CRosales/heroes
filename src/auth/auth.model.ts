@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export interface IUserModel{
     name: string,
     email: string,
-    password: string
+    password: string,
 }
 
 export interface ITokenModel{
@@ -17,26 +17,29 @@ export interface ITokenModel{
 export interface IUserCredentials{
     id: number,
     password: string,
-    role: string
+    role: string,
 }
 
 export interface INewUser{
     name: string,
     email: string,
-    message: string
+    message: string,
 }
 
 export class AuthModel {
-  public static async createUser(user: IUserModel): Promise<INewUser> {
+  public static async createUser(user: IUserModel, creatorId: number):
+  Promise<INewUser> {
     const resultUser = await prisma.user.create({
       data: {
         email: user.email,
         name: user.name,
         password: await bcrypt.hash(user.password, 10),
+        creatorId: creatorId,
       },
     });
-    return {name: resultUser.name!, email: resultUser.email, message:
-      'Se creó un nuevo uusario'};
+    return {name: resultUser.name?resultUser.name:'',
+      email: resultUser.email, message:
+      'Se creó un nuevo usuario'};
   }
 
   public static async logIn(user: IUserModel): Promise<IUserCredentials> {

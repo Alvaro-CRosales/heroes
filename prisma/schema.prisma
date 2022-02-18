@@ -9,13 +9,18 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id       Int     @id @default(autoincrement())   
   email    String  @unique   
   name     String?   
   password String   
-  role     Role    @default(USER) 
-}  
+  role     Role   @default(USER)
+  creatorId Int?
+  creator   User?  @relation("first", fields: [creatorId], references: [id])
+  successor User[]  @relation("first")
+}
+
   
 enum Role {   
   USER  

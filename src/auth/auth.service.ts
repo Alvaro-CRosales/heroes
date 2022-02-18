@@ -1,20 +1,14 @@
 import {compare} from 'bcrypt';
 import {IResponseModel} from '../helpers/handler';
 import {JWT} from '../helpers/jwt';
-import {AuthModel, IUserModel} from './authmodel';
+import {AuthModel, IUserModel} from './auth.model';
 
 
 export class AuthService {
-  public static async createUser(user:IUserModel, userToken:string):
+  public static async createUser(user:IUserModel, creatorId:number):
   Promise<IResponseModel> {
-    const verify = await JWT.decoded(userToken);
-    if (verify.role === 'ADMIN') {
-      const result = await AuthModel.createUser(user);
-      console.log(result);
-      return {code: 201, message: result};
-    } else {
-      return {code: 401, message: 'Access denied'};
-    }
+    const result = await AuthModel.createUser(user, creatorId);
+    return {code: 201, message: result};
   }
 
   public static async logIn(user:IUserModel, password:IUserModel)
@@ -24,7 +18,7 @@ export class AuthService {
       const token = await JWT.tokenize({id: result.id, role: result.role});
       return {code: 201, message: token};
     } else {
-      return {code: 401, message: 'Access denied'};
+      return {code: 401, message: 'Wrong credentials'};
     }
   }
 }
