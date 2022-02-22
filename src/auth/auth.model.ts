@@ -51,4 +51,46 @@ export class AuthModel {
     return {id: resultUser!.id, password: resultUser!.password, role:
       resultUser!.role};
   }
+
+  public static async getAll(): Promise<any> {
+    const resultUser = await prisma.user.findMany();
+    return resultUser;
+  }
+
+  public static async getUnique(id:number): Promise<any> {
+    const resultUser = await prisma.user.findUnique(
+        {
+          where: {
+            id: id,
+          }, select: {
+            name: true,
+            creator: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        });
+    return resultUser;
+  }
+
+  public static async updateUser(id:number, name:string): Promise<any> {
+    const resultUser = await prisma.user.update({
+      where: {
+        id: id,
+      }, data: {
+        name: name,
+      },
+    });
+    return resultUser;
+  }
+
+  public static async deleteUser(id:number): Promise<any> {
+    const resultUser = await prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
+    return resultUser;
+  }
 }

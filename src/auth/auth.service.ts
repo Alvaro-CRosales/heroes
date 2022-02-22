@@ -21,4 +21,25 @@ export class AuthService {
       return {code: 401, message: 'Wrong credentials'};
     }
   }
+
+  public static async getAll(): Promise<IResponseModel> {
+    const result = await AuthModel.getAll();
+    return {code: 201, message: result};
+  }
+
+  public static async getUnique(id:number): Promise<IResponseModel> {
+    const result = await AuthModel.getUnique(id);
+    return {code: 200, message: result};
+  }
+
+  public static async updateUser(id:number, name:string):
+  Promise<IResponseModel> {
+    const result = await AuthModel.updateUser(id, name);
+    return {code: 200, message: result};
+  }
+
+  public static async deleteUser(id:number): Promise<IResponseModel> {
+    const result = await AuthModel.deleteUser(id);
+    return {code: 200, message: result};
+  }
 }

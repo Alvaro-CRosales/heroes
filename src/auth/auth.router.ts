@@ -7,6 +7,10 @@ export const authRouter = router();
 authRouter
     .post('/login', AuthCtrl.logIn)
     .use('/', JWT.isAdmin)
-    .post('/', AuthCtrl.createUser);
+    .post('/', AuthCtrl.createUser)
+    .get('/all', AuthCtrl.getAll)
+    .get('/user', AuthCtrl.getUnique)
+    .patch('/user', AuthCtrl.updateUser)
+    .delete('/user', AuthCtrl.deleteUser);
 
 

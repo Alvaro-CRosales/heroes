@@ -31,4 +31,45 @@ export class AuthCtrl {
       handler(res, {code: 400, message: error});
     }
   }
+
+  public static async getAll(req:Request, res:Response): Promise<void> {
+    try {
+      const serviceResponse:IResponseModel = await AuthService.getAll();
+      handler(res, serviceResponse);
+    } catch (error:any) {
+      handler(res, {code: 400, message: error});
+    }
+  }
+
+  public static async getUnique(req:Request, res:Response): Promise<void> {
+    try {
+      const id: number = Number(req.query.id);
+      const serviceResponse:IResponseModel = await AuthService.getUnique(id);
+      handler(res, serviceResponse);
+    } catch (error:any) {
+      handler(res, {code: 400, message: error});
+    }
+  }
+
+  public static async updateUser(req:Request, res:Response): Promise<void> {
+    try {
+      const id: number = Number(req.query.id);
+      const name: string = req.body.name;
+      const serviceResponse:IResponseModel =
+      await AuthService.updateUser(id, name);
+      handler(res, serviceResponse);
+    } catch (error:any) {
+      handler(res, {code: 400, message: error});
+    }
+  }
+
+  public static async deleteUser(req:Request, res:Response): Promise<void> {
+    try {
+      const id: number = req.body.id;
+      const serviceResponse:IResponseModel = await AuthService.deleteUser(id);
+      handler(res, serviceResponse);
+    } catch (error:any) {
+      handler(res, {code: 400, message: error});
+    }
+  }
 }
