@@ -22,8 +22,9 @@ export class AuthService {
     }
   }
 
-  public static async getAll(): Promise<IResponseModel> {
-    const result = await AuthModel.getAll();
+  public static async getAll(name:string, email:string):
+  Promise<IResponseModel> {
+    const result = await AuthModel.getAll(name, email);
     return {code: 201, message: result};
   }
 

@@ -34,7 +34,10 @@ export class AuthCtrl {
 
   public static async getAll(req:Request, res:Response): Promise<void> {
     try {
-      const serviceResponse:IResponseModel = await AuthService.getAll();
+      const name = String(req.query.name);
+      const email = String(req.query.email);
+      const serviceResponse:IResponseModel =
+      await AuthService.getAll(name, email);
       handler(res, serviceResponse);
     } catch (error:any) {
       handler(res, {code: 400, message: error});

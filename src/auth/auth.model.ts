@@ -52,8 +52,18 @@ export class AuthModel {
       resultUser!.role};
   }
 
-  public static async getAll(): Promise<any> {
-    const resultUser = await prisma.user.findMany();
+  public static async getAll(name:string, email:string): Promise<any> {
+    const resultUser = await prisma.user.findMany({
+      where: {
+        name: {
+          startsWith: name === 'undefined' ? name = '': name,
+        },
+        email: {
+          startsWith: email === 'undefined' ? email = '': email,
+        },
+
+      },
+    });
     return resultUser;
   }
 
