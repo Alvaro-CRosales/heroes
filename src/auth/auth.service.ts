@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   public static async deleteUser(id:number): Promise<IResponseModel> {
-    const result = await AuthModel.deleteUser(id);
-    return {code: 200, message: result};
+    await AuthModel.deleteUser(id);
+    return {code: 200, message: 'Se eliminó al usuario'};
   }
 }

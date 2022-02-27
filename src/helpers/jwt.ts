@@ -26,4 +26,18 @@ export class JWT {
       handler(res, {code: 403, message: 'Service forbbiden'});
     }
   }
+
+  public static async isEditable(req: Request, res: Response, next:NextFunction)
+  :Promise<void> {
+    const token: any = jwt.verify(req.headers.authorization?
+      req.headers.authorization.replace('Bearer ', ''): '',
+    env.JWT_SECRET);
+    console.log(req.params.id);
+    console.log(token.id);
+    if (token.role === 'ADMIN' || req.params.id == token.id) {
+      next();
+    } else {
+      handler(res, {code: 403, message: 'Service forbbiden'});
+    }
+  }
 }

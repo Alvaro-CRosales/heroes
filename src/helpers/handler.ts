@@ -2,7 +2,7 @@ import {Response} from 'express';
 
 export interface IResponseModel {
     code: number,
-    message: string | object
+    message: string | object | null
 }
 
 class RequestHandler {

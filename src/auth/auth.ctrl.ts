@@ -46,7 +46,7 @@ export class AuthCtrl {
 
   public static async getUnique(req:Request, res:Response): Promise<void> {
     try {
-      const id: number = Number(req.query.id);
+      const id: number = Number(req.params.id);
       const serviceResponse:IResponseModel = await AuthService.getUnique(id);
       handler(res, serviceResponse);
     } catch (error:any) {
@@ -56,7 +56,7 @@ export class AuthCtrl {
 
   public static async updateUser(req:Request, res:Response): Promise<void> {
     try {
-      const id: number = Number(req.query.id);
+      const id: number = Number(req.params.id);
       const name: string = req.body.name;
       const serviceResponse:IResponseModel =
       await AuthService.updateUser(id, name);

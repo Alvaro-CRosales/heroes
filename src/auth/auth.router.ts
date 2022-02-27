@@ -6,11 +6,11 @@ export const authRouter = router();
 
 authRouter
     .post('/login', AuthCtrl.logIn)
+    .patch('/user/:id', JWT.isEditable, AuthCtrl.updateUser)
     .use('/', JWT.isAdmin)
     .post('/', AuthCtrl.createUser)
     .get('/all', AuthCtrl.getAll)
-    .get('/user', AuthCtrl.getUnique)
-    .patch('/user', AuthCtrl.updateUser)
+    .get('/user/:id', AuthCtrl.getUnique)
     .delete('/user', AuthCtrl.deleteUser);
 
 

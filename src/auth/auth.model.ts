@@ -1,4 +1,4 @@
-import {PrismaClient} from '@prisma/client';
+import {PrismaClient, User} from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -24,6 +24,13 @@ export interface INewUser{
     name: string,
     email: string,
     message: string,
+}
+
+export interface IUserSelect{
+  name: string | null,
+  creator: {
+    name: string | null
+  } | null,
 }
 
 export class AuthModel {
@@ -52,8 +59,8 @@ export class AuthModel {
       resultUser!.role};
   }
 
-  public static async getAll(name:string, email:string): Promise<any> {
-    const resultUser = await prisma.user.findMany({
+  public static async getAll(name:string, email:string): Promise<User[]> {
+    const resultUser: User[] = await prisma.user.findMany({
       where: {
         name: {
           startsWith: name === 'undefined' ? name = '': name,
@@ -67,8 +74,8 @@ export class AuthModel {
     return resultUser;
   }
 
-  public static async getUnique(id:number): Promise<any> {
-    const resultUser = await prisma.user.findUnique(
+  public static async getUnique(id:number): Promise<IUserSelect | null> {
+    const resultUser: IUserSelect | null = await prisma.user.findUnique(
         {
           where: {
             id: id,
@@ -84,8 +91,8 @@ export class AuthModel {
     return resultUser;
   }
 
-  public static async updateUser(id:number, name:string): Promise<any> {
-    const resultUser = await prisma.user.update({
+  public static async updateUser(id:number, name:string): Promise<User> {
+    const resultUser: User = await prisma.user.update({
       where: {
         id: id,
       }, data: {
@@ -95,12 +102,11 @@ export class AuthModel {
     return resultUser;
   }
 
-  public static async deleteUser(id:number): Promise<any> {
-    const resultUser = await prisma.user.delete({
+  public static async deleteUser(id:number): Promise<void> {
+    await prisma.user.delete({
       where: {
         id: id,
       },
     });
-    return resultUser;
   }
 }
